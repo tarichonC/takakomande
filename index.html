@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="icon" type="image/png" href="img/favicon.png">
+        <link rel="stylesheet" type="text/css" href="style.css">
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        <link href="https://fonts.googleapis.com/css?family=Shojumaru" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+        <meta charset="utf-8">
+    </head>
+    <body>
+        <header id="top">
+            <div id="top-header" class="wrapper">
+                <form id="left-header-section">
+                    <input id="research-query" type="text" name="research-query" placeholder="Rechercher">
+                    <input type="submit" value="rechercher">
+                </form>
+                <div><a href="" id="main-logo"><img src="./img/logo-v1.1.png" alt="Takakomandé"></a></div>
+                <div id="right-header-section">
+                    <ul>
+                        <li class="header-account" id="sign-in-out"><a id="sign-in" href="?login">Connexion</a></li>
+                        <li class="header-cart"><a href="?caddie">Panier <span id="caddieAmount">(vide)</span></a></li>
+                    </ul>
+                </div>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#top" class="active">Accueil</a></li>
+                    <li><a id="scroll2food-menu" href="#menu-items">La carte</a></li>
+                    <li><a href="">Contact</a></li>
+                </ul>    
+            </nav>
+        </header>
+        <section id="slider">
+            <figure>
+                <img src="carroussel/carroussel-3.jpg" alt>
+                <img src="carroussel/carroussel-2.jpg" alt>
+                <img src="carroussel/carroussel-1.jpg" alt>
+                <img src="carroussel/carroussel-4.jpg" alt>
+                <img src="carroussel/carroussel-5.jpg" alt>
+            </figure>
+        </section>
+        <section id="menu-items" class="wrapper">
+            <ul class="filter">
+                <p>Filtre :</p>
+                <li><a href="" id="menu-filter">Nos menus</a></li>
+                <li><a href="" id="starter-filter">Nos entrées</a></li>
+                <li><a href="" id="sushiboard-filter">Nos plateaux</a></li>
+                <li><a href="" id="dessert-filter">Nos desserts</a></li>
+            </ul>
+            <div id="food-menu"></div>
+        </section>
+
+        <div id="footer">
+            <div class="footer-section">
+                <h3>Takakomandé</h3>
+                <ul>
+                    <li>Qui sommes-nous?</li>
+                    <li>Nos valeurs</li>
+                    <li>Nos engagements</li>
+                    <li>A propos</li>
+                    <li>Contactez-nous</li> 
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Actualité</h3>
+                <ul>
+                    <li>Nos Partenaires</li>
+                    <li>Les Témoignages</li>
+                    <li>Les Chiffres Clés </li>
+                    <li>Paiement sécurisé</li> 
+                </ul>
+            </div>
+            <div id="social-network">
+                <h3>Suivez-nous</h3>
+                <img src="img/socialmedia.png">
+            </div>
+        </div>
+        <footer>
+            <p class="disclaimer center">POUR VOTRE SANTÉ, PRATIQUEZ UNE ACTIVITÉ PHYSIQUE RÉGULIÈRE.</p>
+        </footer>
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script type="text/javascript" src="./lib/js.cookie.js"></script>
+        <script type="text/javascript" src="script.js"></script>
+    </body>
+</html>

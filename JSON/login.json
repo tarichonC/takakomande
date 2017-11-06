@@ -1,0 +1,10 @@
+[
+    {
+        "login": "toto@mail.com",
+        "password": "toto"
+    },
+    {
+        "login": "tata@mail.com",
+        "password": "tata"
+    }
+]
