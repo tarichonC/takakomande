@@ -17,6 +17,8 @@ $(function() {
             Cookies.remove('caddie');
             $('#sign-in-out').html('<a id="sign-in" href="?sign-in">Connexion</a>');
             console.log('après remove ' + Cookies.get('login'));
+            caddie = JSON.parse(Cookies.get('caddie'));
+            updateCaddieTotal();
         });
     }
 
@@ -441,6 +443,11 @@ $(function() {
     $('body').on('click', '#sign-out', function(event) {
         event.preventDefault();
         $('#sign-in-out').html('<a id="sign-in" href="?sign-out"><a id="sign-in" href="?sign-in">Connexion</a>');
+        
+        Cookies.remove('login');
+        Cookies.remove('caddie');
+        caddie = [];
+        updateCaddieTotal();
     });
 
     $('body').on('click', '#login-submit', function(event) {
