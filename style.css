@@ -148,7 +148,8 @@ header a#main-logo img {
 
 #caddie {
     position: absolute;
-    right: 30px;
+    margin-top: 20px;
+    right: 50px;
     z-index: 2;
     background-color: rgba(255,255,255,.91);
     vertical-align: center;
@@ -156,8 +157,16 @@ header a#main-logo img {
     border-bottom-right-radius: 5px;
     padding: 5px;
     border-left: 1px solid rgb(149,149,149);
-    border-right: 1px solid rgb(149,149,149);
-    border-bottom: 1px solid rgb(149,149,149);
+    
+    -moz-box-shadow: 2px 2px 5px 1px #656565;
+    -webkit-box-shadow: 2px 2px 5px 1px #656565;
+    -o-box-shadow: 2px 2px 5px 1px #656565;
+    box-shadow: 2px 2px 5px 1px #656565;
+    filter:progid:DXImageTransform.Microsoft.Shadow(color=#656565, Direction=134, Strength=5);
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    
 }
 
 #caddie img {
@@ -170,7 +179,8 @@ header a#main-logo img {
 }
 
 #caddie input {
-    width: 20px;
+    width: 50px;
+    text-align: right;
     border: none;
     background-color: rgba(255,255,255, 0.0);
 }
@@ -605,6 +615,34 @@ footer, #marquee{
     bottom: 0;
     width: 100%;
     line-height: 30px;
+}
+
+#popup-container {
+    text-align: center;
+    margin: 0 auto 0;
+    padding: 6px;  
+    position: fixed;
+    top: 10px;
+    z-index: 8000;
+    left: 50%;
+    margin-left: -100px;
+}
+
+#popup-container p {
+    width: 200px;
+    opacity: 0.9;
+    background-color: rgba(255,255,255,.90);
+    border-radius: 7px;
+    margin-bottom: 8px;
+    border: 1px solid;
+    -moz-box-shadow: 2px 2px 1px 1px #656565;
+    -webkit-box-shadow: 2px 2px 1px 1px #656565;
+    -o-box-shadow: 2px 2px 1px 1px #656565;
+    box-shadow: 2px 2px 1px 1px #656565;
+    filter:progid:DXImageTransform.Microsoft.Shadow(color=#656565, Direction=134, Strength=5);
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
 }
 
 @keyframes slidy {

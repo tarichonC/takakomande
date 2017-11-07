@@ -6,5 +6,9 @@
     {
         "login": "tata@mail.com",
         "password": "tata"
+    },
+    {
+        "login": "george@lucas.sw",
+        "password": "maythe4thbewithU"
     }
 ]

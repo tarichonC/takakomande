@@ -1,3 +1,6 @@
+var JSONfoodItem = 'JSON/food-menu.json';
+
+
 $(function() {
 
     var caddie = [];
@@ -7,34 +10,31 @@ $(function() {
     if(Cookies.get('caddie') != null)
         caddie = JSON.parse(Cookies.get('caddie'));
 
-
     updateCaddieTotal();
 
-    if(Cookies.get('login') != null) {
-        $('#sign-in-out').html('<a id="sign-out" href="?sign-out">Déconnecter <span class="small">(' + Cookies.get('login') +')</span></a>');
-        $('#sign-out').click(function() {
-            Cookies.remove('login');
-            Cookies.remove('caddie');
-            $('#sign-in-out').html('<a id="sign-in" href="?sign-in">Connexion</a>');
-            console.log('après remove ' + Cookies.get('login'));
-            caddie = JSON.parse(Cookies.get('caddie'));
-            updateCaddieTotal();
-        });
+    $('#food-menu').html('<img src="img/loading.gif" >');
+    
+    setTimeout(loadFoodMenu, 1200);
+
+    if(typeof Cookies.get('login') != 'undefined') {
+        $('#sign-in-out').html( signOutLinkHtml( Cookies.get('login') ) );
+
+        Cookies.remove('login');
+        Cookies.remove('caddie');
+
     }
 
-    // Get the JSON content to display the menu
-    $.getJSON( "JSON/food-menu.json", function( data ) {
-        var items = [];
-        $.each( data, function( key, val ) {
-            items.push(val);
-        });
-        var html = ""
-        items.forEach(function(item) {
-            html += "<div id='"+ item.id +"' class='food-menu-item'><img src='food-menu-img/" + item.img + "'>";
-            html += "<h3>" + item.name + "</h3><p>" + item.price + " €</p>";
-            html += "<ul><li class='more-info'><a href='?info&id=" + item.id + "'>+ d'infos</a></li><li class='add-to-cart'><a href='?add2cart=" + item.id + "'>Ajouter au panier</a></li></ul></div>";
-        });
-        $("#food-menu").html(html);
+    $('body').on('click', '#sign-out', function(clickEvent) {
+
+        clickEvent.stopPropagation();
+
+        caddie = [] ;
+        Cookies.remove('login');
+        Cookies.remove('caddie');
+
+        $('#sign-in-out').html( signInLinkHtml() );
+
+        console.debug('("#sign-out").click() : after erasing cookies \n -- caddie[]= ' + caddie + '\n -- coockie(login) =' + Cookies.get('login') + '\n -- coockie(caddie)=' + Cookies.get('caddie'));
     });
 
     // Clear Each placeholder on focus
@@ -142,6 +142,25 @@ $(function() {
 
         pushCaddie(id);
 
+        if( ! $('#popup-container').length) {
+            var containerHtml = '<div id="popup-container"></div>';
+            $('body').append(containerHtml);
+        }
+
+        var lastId = 0;
+
+        if($('#popup-container p').length) {
+            lastId = parseInt($( "#popup-container p" ).attr('id')) + 1;
+        }
+        
+        var e = $('<p id="popup' + lastId + '" class="popup">Element ajouté au panier.</p>');
+
+        $('#popup-container').append(e); // put it into the DOM
+        e.fadeIn(200).delay(1500).fadeOut(200);
+        setTimeout(function(){
+            e.remove();
+        },2000);
+
         Cookies.set('caddie', JSON.stringify(caddie));
         updateCaddieTotal();
 
@@ -167,11 +186,13 @@ $(function() {
                 var unitPrice = parseFloat(items[i].price) * parseFloat(item.times);
                 html += '<td class="center"><img src="food-menu-img/' + items[i].img +'"></td>';
                 html += '<td>' + items[i].name + '</td>';
-                html += '<td class="center"><input type="text" id="foodItemCount' + item.id  +'" value="' + item.times + '"></td>';
+                html += '<td class="center"><input type="number" id="foodItemCount' + item.id  +'" value="' + item.times + '"></td>';
                 html += '<td class="right">' + unitPrice + '€</td>';
                 html += '<td class="center"><a href="?removeFromCaddie=' + item.id + '">&times;</a></td>';
                 html += '</tr>';
             });
+
+            html += '<tfoot><tr><td></tr></tfoot>'
 
             html += "</table>";
             if($('#caddie').length) {
@@ -242,9 +263,11 @@ $(function() {
     });
 
     $('body').on('click', 'a[href^="?caddie"]', function() {
+
         event.preventDefault();
+        
         if($('#caddie').length) {
-            $('#caddie').remove();
+            $('#caddie').slideToggle(100);
         }
         else {
             caddie2html();
@@ -254,39 +277,12 @@ $(function() {
     $('body').on('click', 'a#menu-filter', function(event) {
 
         event.preventDefault();
-        $('a#menu-filter').removeClass("active");
-        $('a#starter-filter').removeClass("active");
-        $('a#sushiboard-filter').removeClass("active");
-        $('a#dessert-filter').removeClass("active");
 
-        $('a#menu-filter').addClass("active");
+        setActiveFilter($(this));
 
-        $.getJSON( "JSON/food-menu.json", function( data ) {
-
-            var items = [];
-            var results = [];
-
-            $.each( data, function( key, val ) {
-                items.push(val);
-            });
-
-            // console.log('a#starter-filter' + items);
-
-            for(var i=0 ; i<items.length ; i++) {
-                if(items[i].type == "menu") {
-                    results.push(items[i]);
-                }
-            }
-
-            var html = ""
-
-            results.forEach(function(item) {
-                html += "<div id='"+ item.id +"' class='food-menu-item'><img src='food-menu-img/" + item.img + "'>";
-                html += "<h3>" + item.name + "</h3><p>" + item.price + " €</p>";
-                html += "<ul><li class='more-info'><a href='?info&id=" + item.id + "'>+ d'infos</a></li><li class='add-to-cart'><a href='?add2cart=" + item.id + "'>Ajouter au panier</a></li></ul></div>";
-            });
-            $("#food-menu").html(html);
-        });
+        $('#food-menu').html('<img src="img/loading.gif" >');
+        
+        setTimeout(loadFoodMenuMenu, 800);
 
     });
 
@@ -295,37 +291,11 @@ $(function() {
 
         event.preventDefault();
 
-        $('a#menu-filter').removeClass("active");
-        $('a#starter-filter').removeClass("active");
-        $('a#sushiboard-filter').removeClass("active");
-        $('a#dessert-filter').removeClass("active");
+        setActiveFilter($(this));
 
-        $('a#dessert-filter').addClass('active');
-
-        $.getJSON( "JSON/food-menu.json", function( data ) {
-
-            var items = [];
-            var results = [];
-
-            $.each( data, function( key, val ) {
-                items.push(val);
-            });
-
-            for(var i=0 ; i<items.length ; i++) {
-                if(items[i].type == "dessert") {
-                    results.push(items[i]);
-                }
-            }
-
-            var html = ""
-
-            results.forEach(function(item) {
-                html += "<div id='"+ item.id +"' class='food-menu-item'><img src='food-menu-img/" + item.img + "'>";
-                html += "<h3>" + item.name + "</h3><p>" + item.price + " €</p>";
-                html += "<ul><li class='more-info'><a href='?info&id=" + item.id + "'>+ d'infos</a></li><li class='add-to-cart'><a href='?add2cart=" + item.id + "'>Ajouter au panier</a></li></ul></div>";
-            });
-            $("#food-menu").html(html);
-        });
+        $('#food-menu').html('<img src="img/loading.gif" >');
+        
+        setTimeout(loadFoodMenuDessert, 800);
 
     });
 
@@ -335,39 +305,11 @@ $(function() {
 
         event.preventDefault();
 
-        $('a#menu-filter').removeClass("active");
-        $('a#starter-filter').removeClass("active");
-        $('a#sushiboard-filter').removeClass("active");
-        $('a#dessert-filter').removeClass("active");
+        setActiveFilter($(this));
 
-        $(this).addClass("active");
-
-        $.getJSON( "JSON/food-menu.json", function( data ) {
-
-            var items = [];
-            var results = [];
-
-            $.each( data, function( key, val ) {
-                items.push(val);
-            });
-
-            // console.log('a#starter-filter' + items);
-
-            for(var i=0 ; i<items.length ; i++) {
-                if(items[i].type == "plateau") {
-                    results.push(items[i]);
-                }
-            }
-
-            var html = ""
-
-            results.forEach(function(item) {
-                html += "<div id='"+ item.id +"' class='food-menu-item'><img src='food-menu-img/" + item.img + "'>";
-                html += "<h3>" + item.name + "</h3><p>" + item.price + " €</p>";
-                html += "<ul><li class='more-info'><a href='?info&id=" + item.id + "'>+ d'infos</a></li><li class='add-to-cart'><a href='?add2cart=" + item.id + "'>Ajouter au panier</a></li></ul></div>";
-            });
-            $("#food-menu").html(html);
-        });
+        $('#food-menu').html('<img src="img/loading.gif" >');
+        
+        setTimeout(loadFoodMenuPlateau, 800);
 
     });
 
@@ -377,39 +319,11 @@ $(function() {
 
         event.preventDefault();
 
-        $('a#menu-filter').removeClass("active");
-        $('a#starter-filter').removeClass("active");
-        $('a#sushiboard-filter').removeClass("active");
-        $('a#dessert-filter').removeClass("active");
+        setActiveFilter($(this));
 
-        $('a#starter-filter').addClass("active");
-
-        $.getJSON( "JSON/food-menu.json", function( data ) {
-
-            var items = [];
-            var results = [];
-
-            $.each( data, function( key, val ) {
-                items.push(val);
-            });
-
-            // console.log('a#starter-filter' + items);
-
-            for(var i=0 ; i<items.length ; i++) {
-                if(items[i].type == "entrée") {
-                    results.push(items[i]);
-                }
-            }
-
-            var html = ""
-
-            results.forEach(function(item) {
-                html += "<div id='"+ item.id +"' class='food-menu-item'><img src='food-menu-img/" + item.img + "'>";
-                html += "<h3>" + item.name + "</h3><p>" + item.price + " €</p>";
-                html += "<ul><li class='more-info'><a href='?info&id=" + item.id + "'>+ d'infos</a></li><li class='add-to-cart'><a href='?add2cart=" + item.id + "'>Ajouter au panier</a></li></ul></div>";
-            });
-            $("#food-menu").html(html);
-        });
+        $('#food-menu').html('<img src="img/loading.gif" >');
+        
+        setTimeout(loadFoodMenuEntree, 800);
 
     });
 
@@ -456,9 +370,10 @@ $(function() {
         var password = $('#password-login-connexion').val();
         var processOk = false;
 
-        console.log('-- request for ID : login(' + login + ') passws(' + password + ')');
+        console.log('-- request for ID : login(' + login + ') passwd(' + password + ')');
 
         event.preventDefault();
+
         $('#login-error').remove();
 
         $.getJSON( "JSON/login.json", function( data ) {
@@ -485,6 +400,10 @@ $(function() {
                 $("#loginModal").remove();
                 Cookies.set('login', login);
                 $('#sign-in-out').html('<a id="sign-out" href="?sign-out">Déconnecter <span class="small">(' + Cookies.get('login') +')</span></a>');
+
+                if(Cookies.get['login'] == 'george@lucas.sw')
+                window.location.replace("http://blogs.sitepointstatic.com/examples/tech/css3-starwars/index.html");
+                
 
             }
 
