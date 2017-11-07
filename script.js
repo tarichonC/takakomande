@@ -267,7 +267,7 @@ $(function() {
         event.preventDefault();
         
         if($('#caddie').length) {
-            $('#caddie').slideToggle(100);
+            $('#caddie').remove();
         }
         else {
             caddie2html();
